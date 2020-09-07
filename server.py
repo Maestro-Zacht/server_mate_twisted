@@ -1,5 +1,6 @@
-from twisted.internet import protocol, reactor
 import os
+
+from twisted.internet import protocol, reactor
 
 PORT = int(os.environ.get('PORT', 12345))
 
