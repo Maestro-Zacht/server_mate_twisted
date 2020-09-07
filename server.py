@@ -15,5 +15,6 @@ class ServerFactory(protocol.ServerFactory):
 
 
 if __name__ == '__main__':
+    print(f'ascolto sulla porta {PORT}')
     reactor.listenTCP(PORT, ServerFactory())
     reactor.run()
