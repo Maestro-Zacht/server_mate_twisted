@@ -13,8 +13,8 @@ class Server(protocol.Protocol):
     def dataReceived(self, data):
         self.transport.write(data)
 
-    def connectionMade(self):
-        print('New connection')
+    # def connectionMade(self):
+        # print('New connection')
 
 
 class ServerFactory(protocol.ServerFactory):
@@ -23,11 +23,12 @@ class ServerFactory(protocol.ServerFactory):
         self.collegati = {}
 
     def buildProtocol(self, addr):
+        print(f'new conn: {addr.host}')
         return Server(self.collegati)
 
 
 if __name__ == '__main__':
     print(f'ascolto sulla porta {PORT}')
-    endpoint = endpoints.TCP4ServerEndpoint(reactor, PORT)
+    endpoint = endpoints.TCP4ServerEndpoint(reactor, PORT, interface='0.0.0.0')
     endpoint.listen(ServerFactory())
     reactor.run()
