@@ -1,13 +1,11 @@
 import os
 
-from twisted.internet import reactor
-from twisted.internet.endpoints import TCP4ServerEndpoint
-from twisted.internet.protocol import Protocol, ServerFactory
+from twisted.internet import reactor, endpoints, protocol
 
 PORT = int(os.environ.get('PORT', 12345))
 
 
-class Server(Protocol):
+class Server(protocol.Protocol):
 
     def __init__(self, collegati):
         self.collegati = collegati
@@ -19,7 +17,7 @@ class Server(Protocol):
         print('New connection')
 
 
-class ServerFactory(ServerFactory):
+class ServerFactory(protocol.ServerFactory):
 
     def __init__(self):
         self.collegati = {}
@@ -30,6 +28,6 @@ class ServerFactory(ServerFactory):
 
 if __name__ == '__main__':
     print(f'ascolto sulla porta {PORT}')
-    endpoint = TCP4ServerEndpoint(reactor, PORT)
+    endpoint = endpoints.TCP4ServerEndpoint(reactor, PORT)
     endpoint.listen(ServerFactory())
     reactor.run()
