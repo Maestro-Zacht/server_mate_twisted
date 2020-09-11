@@ -11,16 +11,21 @@ class Server(protocol.Protocol):
         self.collegati = collegati
 
     def dataReceived(self, data):
-        self.transport.write(data)
+        for user in self.collegati:
+            if user != self:
+                user.transport.write(data)
 
-    # def connectionMade(self):
-        # print('New connection')
+    def connectionMade(self):
+        self.collegati.append(self)
+
+    def connectionLost(self, reaason):
+        self.collegati.remove(self)
 
 
 class ServerFactory(protocol.ServerFactory):
 
     def __init__(self):
-        self.collegati = {}
+        self.collegati = []
 
     def buildProtocol(self, addr):
         print(f'new conn: {addr.host}')
@@ -29,6 +34,6 @@ class ServerFactory(protocol.ServerFactory):
 
 if __name__ == '__main__':
     print(f'ascolto sulla porta {PORT}')
-    endpoint = endpoints.TCP4ServerEndpoint(reactor, PORT, interface='0.0.0.0')
+    endpoint = endpoints.TCP4ServerEndpoint(reactor, PORT)
     endpoint.listen(ServerFactory())
     reactor.run()
