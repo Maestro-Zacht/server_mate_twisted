@@ -34,6 +34,6 @@ class ServerFactory(protocol.ServerFactory):
 
 if __name__ == '__main__':
     print(f'ascolto sulla porta {PORT}')
-    endpoint = endpoints.TCP4ServerEndpoint(reactor, PORT)
+    endpoint = endpoints.TCP4ServerEndpoint(reactor, PORT, interface='0.0.0.0')
     endpoint.listen(ServerFactory())
     reactor.run()

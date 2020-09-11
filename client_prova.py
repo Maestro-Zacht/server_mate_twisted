@@ -19,6 +19,7 @@ class ClientFactory(protocol.ClientFactory):
 
 
 if __name__ == '__main__':
-    endpoint = endpoints.TCP4ClientEndpoint(reactor, 'localhost', 12345)
+    endpoint = endpoints.TCP4ClientEndpoint(
+        reactor, 'ws://servergarecatta.herokuapps.com/', 20307)
     endpoint.connect(ClientFactory())
     reactor.run()
