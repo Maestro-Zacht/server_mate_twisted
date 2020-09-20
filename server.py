@@ -1,39 +1,25 @@
 import os
-
-from twisted.internet import reactor, endpoints, protocol
+from SimpleWebSocketServer import SimpleWebSocketServer, WebSocket
 
 PORT = int(os.environ.get('PORT', 12345))
+USERS = []
 
 
-class Server(protocol.Protocol):
+class Server(WebSocket):
+    def handleConnected(self):
+        print(f'{self.address} connesso')
+        USERS.append(self)
 
-    def __init__(self, collegati):
-        self.collegati = collegati
+    def handleClose(self):
+        print(f'{self.address} disconnesso')
+        USERS.remove(self)
 
-    def dataReceived(self, data):
-        for user in self.collegati:
-            if user != self:
-                user.transport.write(data)
-
-    def connectionMade(self):
-        self.collegati.append(self)
-
-    def connectionLost(self, reaason):
-        self.collegati.remove(self)
+    def handleMessage(self):
+        for u in USERS:
+            if u != self:
+                u.sendMessage(self.data)
 
 
-class ServerFactory(protocol.ServerFactory):
-
-    def __init__(self):
-        self.collegati = []
-
-    def buildProtocol(self, addr):
-        print(f'new conn: {addr.host}')
-        return Server(self.collegati)
-
-
-if __name__ == '__main__':
-    print(f'ascolto sulla porta {PORT}')
-    endpoint = endpoints.TCP4ServerEndpoint(reactor, PORT, interface='0.0.0.0')
-    endpoint.listen(ServerFactory())
-    reactor.run()
+if __name__ == "__main__":
+    server = SimpleWebSocketServer('', PORT, Server)
+    server.serveforever()

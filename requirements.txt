@@ -1,1 +1,2 @@
-twisted
+websocket-client
+SimpleWebSocketServer
