@@ -15,9 +15,10 @@ class Server(WebSocket):
         USERS.remove(self)
 
     def handleMessage(self):
-        for u in USERS:
-            if u != self:
-                u.sendMessage(self.data)
+        if self.data != 'ping555':
+            for u in USERS:
+                if u != self:
+                    u.sendMessage(self.data)
 
 
 if __name__ == "__main__":
