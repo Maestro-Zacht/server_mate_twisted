@@ -28,12 +28,13 @@ def on_close(ws):
     print('closed')
 
 
-def on_error(ws,  error):
+def on_error(ws, error):
     print(f'errore:\t{error}\nalla socket:\t{ws}')
 
 
 def on_message(ws, message):
-    print(message)
+    if message != 'pong555':
+        print(message)
 
 
 if __name__ == "__main__":
