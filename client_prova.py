@@ -18,7 +18,7 @@ def on_open(ws):
     def keep_opened(*args):
         while c[0]:
             ws.send('ping555')
-            time.sleep(5)
+            time.sleep(30)
 
     thread.start_new_thread(run, ())
     thread.start_new_thread(keep_opened, ())
@@ -37,7 +37,7 @@ def on_message(ws, message):
 
 
 if __name__ == "__main__":
-    websocket.enableTrace(True)
+    websocket.enableTrace(False)
     ws = websocket.WebSocketApp("ws://servergarecatta.herokuapp.com/", on_close=on_close,
                                 on_message=on_message, on_error=on_error, on_open=on_open)
     ws.run_forever()

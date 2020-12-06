@@ -19,6 +19,8 @@ class Server(WebSocket):
             for u in USERS:
                 if u != self:
                     u.sendMessage(self.data)
+        else:
+            self.sendMessage("pong555")
 
 
 if __name__ == "__main__":
