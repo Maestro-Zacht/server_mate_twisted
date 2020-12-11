@@ -20,8 +20,17 @@ def on_open(ws):
             ws.send('ping555')
             time.sleep(30)
 
+    def keep_alive(*args):
+        while c[0]:
+            webs = websocket.create_connection("ws://servergarecatta.herokuapp.com/")
+            webs.send('ping555')
+            print(f'ping:{webs.recv()}')
+            webs.close()
+            time.sleep(600)
+
     thread.start_new_thread(run, ())
     thread.start_new_thread(keep_opened, ())
+    thread.start_new_thread(keep_alive, ())
 
 
 def on_close(ws):
